@@ -1,0 +1,32 @@
+{
+  "name": "genlayer-dispute-resolution",
+  "version": "1.0.0",
+  "description": "AI-powered dispute resolution dApp built on GenLayer blockchain",
+  "main": "frontend/index.html",
+  "scripts": {
+    "start": "cd frontend && python -m http.server 8000",
+    "dev": "cd frontend && python -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/genlayer-dispute-resolution.git"
+  },
+  "keywords": [
+    "genlayer",
+    "blockchain",
+    "ai",
+    "intelligent-contracts",
+    "dispute-resolution",
+    "smart-contracts",
+    "dapp",
+    "web3",
+    "llm",
+    "consensus"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/genlayer-dispute-resolution/issues"
+  },
+  "homepage": "https://github.com/yourusername/genlayer-dispute-resolution#readme"
+}
