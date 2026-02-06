@@ -14,7 +14,7 @@ This dApp lets two parties submit evidence for a dispute. Multiple AI validators
 
 ## Live Demo
 
-🌐 **[Try it now](https://your-demo-url.vercel.app)**
+🌐 **[Try it now](https://dispute-online.vercel.app/)**
 
 ## Quick Start
 
@@ -301,7 +301,7 @@ MIT License - see [LICENSE](LICENSE) file
 
 **Questions:**
 - [GenLayer Discord](https://discord.gg/8Jm4v89VAu)
-- [GitHub Discussions](https://github.com/yourusername/genlayer-dispute-resolution/discussions)
+- [GitHub Discussions](https://github.com/greyw0rks/genlayer-dispute-resolution/discussions)
 
 ## Acknowledgments
 
