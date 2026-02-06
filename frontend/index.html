@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenLayer Dispute Resolution - AI Justice on Blockchain</title>
+    <meta name="description" content="AI-powered dispute resolution with multi-validator consensus on GenLayer blockchain">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --cream: #faf8f3;
+            --ink: #1a1a1a;
+            --rust: #b85842;
+            --rust-dim: #8f4434;
+            --sage: #5a6c57;
+            --shadow: rgba(26, 26, 26, 0.1);
+        }
+
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background: var(--cream);
+            color: var(--ink);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+
+        header {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            border-bottom: 3px double var(--rust);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            color: var(--rust);
+        }
+
+        .subtitle {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sage);
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .mode-btn {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            padding: 0.75rem 2rem;
+            background: white;
+            border: 2px solid var(--ink);
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .mode-btn.active {
+            background: var(--rust);
+            color: white;
+            border-color: var(--rust);
+        }
+
+        .mode-btn:hover:not(.active) { background: var(--cream); }
+
+        .notice {
+            background: rgba(184, 88, 66, 0.1);
+            border: 2px solid var(--rust);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            animation: slideDown 0.4s ease;
+        }
+
+        .notice.info {
+            background: rgba(90, 108, 87, 0.1);
+            border-color: var(--sage);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .connection-box {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 8px 8px 0 var(--shadow);
+        }
+
+        .connection-box code {
+            background: var(--cream);
+            padding: 0.25rem 0.5rem;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid var(--ink);
+        }
+
+        .tab {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--sage);
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: -3px;
+        }
+
+        .tab:hover { color: var(--rust); }
+        .tab.active { color: var(--rust); border-bottom-color: var(--rust); }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 8px 8px 0 var(--shadow);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--rust);
+            color: var(--rust);
+        }
+
+        .form-group { margin-bottom: 1.75rem; }
+
+        label {
+            display: block;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: var(--sage);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.875rem;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            border: 2px solid var(--ink);
+            background: var(--cream);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            background: white;
+            box-shadow: inset 4px 4px 0 var(--shadow);
+        }
+
+        textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+        button {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 1rem 2.5rem;
+            background: var(--rust);
+            color: var(--cream);
+            border: 3px solid var(--ink);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+
+        button:hover:not(:disabled) {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+
+        button:active:not(:disabled) {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+
+        button:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .case-card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .case-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 6px 6px 0 var(--shadow);
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--cream);
+        }
+
+        .case-id {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            color: var(--rust);
+            letter-spacing: 0.1em;
+        }
+
+        .status-badge {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.75rem;
+            border: 2px solid var(--ink);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-badge.awaiting_evidence { background: var(--cream); color: var(--sage); }
+        .status-badge.ready_for_resolution { background: var(--sage); color: white; }
+        .status-badge.resolved { background: var(--rust); color: white; }
+
+        .party-label {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.75rem;
+            color: var(--sage);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .party-name { font-size: 1.1rem; margin-top: 0.25rem; }
+
+        .winner {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--rust);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--cream);
+        }
+
+        .info {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            color: var(--sage);
+            padding: 1rem;
+            background: rgba(90, 108, 87, 0.1);
+            border-left: 3px solid var(--sage);
+            margin-top: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--sage);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--cream);
+            border-top-color: var(--rust);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 26, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--cream);
+            border: 3px solid var(--ink);
+            padding: 2.5rem;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--rust);
+            line-height: 1;
+        }
+
+        .reasoning {
+            font-style: italic;
+            line-height: 1.8;
+            padding: 1.5rem;
+            background: white;
+            border-left: 4px solid var(--rust);
+            margin-top: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+            border-top: 3px double var(--rust);
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            color: var(--sage);
+        }
+
+        footer a {
+            color: var(--rust);
+            text-decoration: none;
+            border-bottom: 1px solid var(--rust);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dispute Resolution</h1>
+            <p class="subtitle">AI Arbitration on GenLayer</p>
+            
+            <div class="mode-toggle">
+                <button class="mode-btn active" onclick="setMode('demo')">Demo Mode</button>
+                <button class="mode-btn" onclick="setMode('live')">Live Mode</button>
+            </div>
+        </header>
+
+        <div id="demoNotice" class="notice">
+            <strong>🎭 Demo Mode Active</strong><br>
+            Using mock data. Perfect for testing! Switch to Live Mode to use real blockchain.
+        </div>
+
+        <div id="liveSetup" class="connection-box" style="display: none;">
+            <h2>Connect to GenLayer Contract</h2>
+            
+            <p style="margin-bottom: 1.5rem;">Enter your deployed contract address to use real blockchain with AI consensus.</p>
+            
+            <div class="form-group">
+                <label for="contractAddress">Contract Address</label>
+                <input type="text" id="contractAddress" placeholder="0x1234567890abcdef1234567890abcdef12345678">
+            </div>
+            
+            <button onclick="connectContract()">Connect to Blockchain</button>
+            
+            <div class="info" style="margin-top: 1.5rem;">
+                <strong>Don't have a contract yet?</strong><br>
+                1. Copy <code>contracts/dispute_resolution.py</code><br>
+                2. Deploy at <a href="https://studio.genlayer.com" target="_blank" style="color: var(--rust);">studio.genlayer.com</a><br>
+                3. Paste address above and click Connect<br>
+                4. Real AI consensus with multiple validators!
+            </div>
+        </div>
+
+        <div id="liveNotice" class="notice info" style="display: none;">
+            <strong>⛓️ Live Mode Active</strong><br>
+            Contract: <code id="connectedAddress" style="background: white; padding: 0.25rem 0.5rem;">...</code><br>
+            Your Account: <code id="userAccount" style="background: white; padding: 0.25rem 0.5rem;">...</code><br>
+            <small>Using real GenLayer blockchain with multi-validator AI consensus</small>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('create')">Create Case</button>
+            <button class="tab" onclick="switchTab('submit')">Submit Evidence</button>
+            <button class="tab" onclick="switchTab('resolve')">Resolve</button>
+            <button class="tab" onclick="switchTab('cases')">View Cases</button>
+        </div>
+
+        <div id="create" class="tab-content active">
+            <div class="section">
+                <h2>Create New Case</h2>
+                <form id="createForm">
+                    <div class="form-group">
+                        <label for="plaintiff">Plaintiff</label>
+                        <input type="text" id="plaintiff" required placeholder="Alice Johnson">
+                    </div>
+                    <div class="form-group">
+                        <label for="defendant">Defendant</label>
+                        <input type="text" id="defendant" required placeholder="Bob Smith">
+                    </div>
+                    <button type="submit">Create Case</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="submit" class="tab-content">
+            <div class="section">
+                <h2>Submit Evidence</h2>
+                <form id="evidenceForm">
+                    <div class="form-group">
+                        <label for="caseId">Case ID</label>
+                        <select id="caseId" required>
+                            <option value="">Select a case</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="party">Party</label>
+                        <select id="party" required>
+                            <option value="plaintiff">Plaintiff</option>
+                            <option value="defendant">Defendant</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="evidence">Evidence</label>
+                        <textarea id="evidence" required placeholder="Provide detailed evidence supporting your case..."></textarea>
+                    </div>
+                    <button type="submit">Submit Evidence</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="resolve" class="tab-content">
+            <div class="section">
+                <h2>Resolve Case</h2>
+                <form id="resolveForm">
+                    <div class="form-group">
+                        <label for="resolveCaseId">Case ID</label>
+                        <select id="resolveCaseId" required>
+                            <option value="">Select a case</option>
+                        </select>
+                    </div>
+                    <button type="submit">Resolve Case</button>
+                    <p class="info">
+                        ⚖ <strong>Demo Mode:</strong> Instant resolution (3 seconds)<br>
+                        ⚖ <strong>Live Mode:</strong> AI consensus takes 30-90 seconds as multiple validators with different LLMs independently analyze evidence
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <div id="cases" class="tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="border: none; padding: 0; margin: 0;">All Cases</h2>
+                <button onclick="loadCases()">Refresh</button>
+            </div>
+            <div id="casesContainer" class="case-grid">
+                <div class="empty-state">
+                    <p>No cases yet. Create your first case!</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built on <a href="https://genlayer.com" target="_blank">GenLayer</a></p>
+            <p style="margin-top: 0.5rem;">Powered by Optimistic Democracy Consensus</p>
+            <p style="margin-top: 1rem;">
+                <a href="https://github.com/yourusername/genlayer-dispute-resolution" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <div id="caseModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize variables first
+        let mode = 'demo';
+        let cases = [];
+        let contract = null;
+        let client = null;
+        let GenLayerClient = null;
+
+        const demoCase = {
+            case_id: 0,
+            plaintiff: "Alice Johnson",
+            defendant: "Bob Smith",
+            plaintiff_evidence: "I hired Bob to build a website for $5000. Contract stated delivery by June 1st. He delivered August 15th (2.5 months late) with broken payment processing and missing admin panel. I have email records proving the original agreement.",
+            defendant_evidence: "Alice changed requirements 15 times during development. Each change added weeks to timeline. Original scope completed on time. Payment issue was incorrect API keys Alice provided. Admin panel moved to Phase 2 per our May 15 email agreement.",
+            status: "resolved",
+            winner: "plaintiff",
+            reasoning: "While scope changes occurred, the defendant failed to formalize these changes properly. Core deliverables were not met according to the original contract."
+        };
+
+        function init() {
+            if (mode === 'demo') {
+                cases = [demoCase];
+                loadCases();
+                updateCaseSelectors();
+            }
+        }
+
+        function setMode(newMode) {
+            mode = newMode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'demo') {
+                document.getElementById('demoNotice').style.display = 'block';
+                document.getElementById('liveSetup').style.display = 'none';
+                document.getElementById('liveNotice').style.display = 'none';
+                cases = [demoCase];
+                loadCases();
+                updateCaseSelectors();
+            } else {
+                document.getElementById('demoNotice').style.display = 'none';
+                document.getElementById('liveSetup').style.display = 'block';
+                document.getElementById('liveNotice').style.display = 'none';
+            }
+        }
+
+        async function connectContract() {
+            const address = document.getElementById('contractAddress').value.trim();
+            if (!address) {
+                alert('Please enter a contract address');
+                return;
+            }
+            
+            try {
+                // Check if SDK is loaded
+                if (typeof window.createClient === 'undefined') {
+                    alert('⚠️ GenLayer SDK not loaded yet. Please refresh the page and try again.');
+                    return;
+                }
+                
+                // Create account for signing transactions
+                const { createAccount } = window;
+                const account = createAccount();
+                
+                // Show account info
+                console.log('Created account:', account.address);
+                console.log('Private key:', account.privateKey);
+                
+                // Create client with account
+                const { createClient } = window;
+                const { studionet } = window.chains || {};
+                
+                if (!studionet) {
+                    alert('⚠️ Chain configuration not loaded. Please refresh and try again.');
+                    return;
+                }
+                
+                client = createClient({
+                    chain: studionet,
+                    account: account // Account for signing
+                });
+                
+                // Initialize consensus
+                await client.initializeConsensusSmartContract();
+                
+                // Store contract address and account
+                window.contractAddress = address;
+                window.clientAccount = account;
+                
+                document.getElementById('liveSetup').style.display = 'none';
+                document.getElementById('liveNotice').style.display = 'block';
+                document.getElementById('connectedAddress').textContent = address;
+                document.getElementById('userAccount').textContent = account.address;
+                
+                // Show account info to user
+                alert(`✓ Connected to GenLayer!\n\nContract: ${address}\nYour Address: ${account.address}\n\nSave your private key: ${account.privateKey}`);
+                
+                await loadCasesLive();
+            } catch (error) {
+                alert('Failed to connect: ' + error.message);
+                console.error('Connection error:', error);
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            if (tabName === 'cases') loadCases();
+            else if (tabName === 'submit' || tabName === 'resolve') updateCaseSelectors();
+        }
+
+        document.getElementById('createForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const plaintiff = document.getElementById('plaintiff').value;
+            const defendant = document.getElementById('defendant').value;
+
+            if (mode === 'live' && client && window.contractAddress) {
+                try {
+                    const txHash = await client.writeContract({
+                        address: window.contractAddress,
+                        functionName: 'create_case',
+                        args: [plaintiff, defendant],
+                        value: 0n,
+                    });
+                    
+                    alert('⏳ Transaction submitted! Waiting for confirmation...');
+                    
+                    const { TransactionStatus } = window;
+                    const receipt = await client.waitForTransactionReceipt({
+                        hash: txHash,
+                        status: TransactionStatus.ACCEPTED,
+                        retries: 50,
+                        interval: 5000,
+                    });
+                    
+                    alert('✓ Case created on blockchain!');
+                    await loadCasesLive();
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            } else {
+                cases.push({
+                    case_id: cases.length,
+                    plaintiff, defendant,
+                    plaintiff_evidence: "",
+                    defendant_evidence: "",
+                    status: "awaiting_evidence",
+                    winner: "", reasoning: ""
+                });
+                alert(`✓ Case #${cases.length - 1} created (demo mode)!`);
+                updateCaseSelectors();
+            }
+            e.target.reset();
+        });
+
+        document.getElementById('evidenceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const caseId = parseInt(document.getElementById('caseId').value);
+            const party = document.getElementById('party').value;
+            const evidence = document.getElementById('evidence').value;
+
+            if (mode === 'live' && client && window.contractAddress) {
+                try {
+                    const txHash = await client.writeContract({
+                        address: window.contractAddress,
+                        functionName: 'submit_evidence',
+                        args: [caseId, party, evidence],
+                        value: 0n,
+                    });
+                    
+                    alert('⏳ Submitting evidence...');
+                    
+                    const { TransactionStatus } = window;
+                    await client.waitForTransactionReceipt({
+                        hash: txHash,
+                        status: TransactionStatus.ACCEPTED,
+                        retries: 50,
+                        interval: 5000,
+                    });
+                    
+                    alert('✓ Evidence submitted on blockchain!');
+                    await loadCasesLive();
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            } else {
+                if (caseId >= 0 && caseId < cases.length) {
+                    const c = cases[caseId];
+                    if (party === 'plaintiff') c.plaintiff_evidence = evidence;
+                    else c.defendant_evidence = evidence;
+                    if (c.plaintiff_evidence && c.defendant_evidence) c.status = "ready_for_resolution";
+                    alert('✓ Evidence submitted (demo mode)!');
+                }
+            }
+            e.target.reset();
+        });
+
+        document.getElementById('resolveForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const caseId = parseInt(document.getElementById('resolveCaseId').value);
+            const btn = e.target.querySelector('button');
+
+            if (mode === 'live' && client && window.contractAddress) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loading"></span> AI Analyzing on Blockchain...';
+                try {
+                    const txHash = await client.writeContract({
+                        address: window.contractAddress,
+                        functionName: 'resolve_case',
+                        args: [caseId],
+                        value: 0n,
+                    });
+                    
+                    alert('⏳ AI validators are analyzing evidence... This takes 30-90 seconds.');
+                    
+                    const { TransactionStatus } = window;
+                    await client.waitForTransactionReceipt({
+                        hash: txHash,
+                        status: TransactionStatus.ACCEPTED,
+                        retries: 100,
+                        interval: 5000,
+                    });
+                    
+                    alert('✓ Case resolved by AI validators!');
+                    await loadCasesLive();
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Resolve Case';
+                }
+            } else {
+                if (caseId >= 0 && caseId < cases.length) {
+                    const c = cases[caseId];
+                    if (!c.plaintiff_evidence || !c.defendant_evidence) {
+                        alert('Both parties must submit evidence first!');
+                        return;
+                    }
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="loading"></span> Analyzing (Demo)...';
+                    setTimeout(() => {
+                        const decisions = [
+                            { winner: "plaintiff", reasoning: "The plaintiff provided documented evidence of original agreement terms. Core deliverables were not met according to contract." },
+                            { winner: "defendant", reasoning: "Evidence demonstrates extensive scope creep without proper change management. Original scope was completed on time." }
+                        ];
+                        const decision = decisions[Math.floor(Math.random() * decisions.length)];
+                        c.winner = decision.winner;
+                        c.reasoning = decision.reasoning;
+                        c.status = "resolved";
+                        alert(`✓ Case #${caseId} resolved (demo)! Winner: ${decision.winner}`);
+                        btn.disabled = false;
+                        btn.textContent = 'Resolve Case';
+                        loadCases();
+                    }, 3000);
+                }
+            }
+        });
+
+        function loadCases() {
+            if (mode === 'live' && contract) {
+                loadCasesLive();
+                return;
+            }
+            const container = document.getElementById('casesContainer');
+            if (cases.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No cases yet. Create your first case!</p></div>';
+                return;
+            }
+            container.innerHTML = cases.map(c => `
+                <div class="case-card" onclick="showCaseDetails(${c.case_id})">
+                    <div class="case-header">
+                        <span class="case-id">CASE #${c.case_id}</span>
+                        <span class="status-badge ${c.status}">${c.status.replace(/_/g, ' ')}</span>
+                    </div>
+                    <div class="case-parties">
+                        <div class="party" style="margin-bottom: 0.5rem;">
+                            <div class="party-label">Plaintiff:</div>
+                            <div class="party-name">${c.plaintiff}</div>
+                        </div>
+                        <div class="party">
+                            <div class="party-label">Defendant:</div>
+                            <div class="party-name">${c.defendant}</div>
+                        </div>
+                    </div>
+                    ${c.winner ? `<div class="winner">Winner: ${c.winner.charAt(0).toUpperCase() + c.winner.slice(1)}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function loadCasesLive() {
+            try {
+                const result = await client.readContract({
+                    address: window.contractAddress,
+                    functionName: 'get_all_cases',
+                    args: [],
+                });
+                
+                cases = result.cases || [];
+                loadCases();
+                updateCaseSelectors();
+            } catch (error) {
+                console.error('Error loading cases:', error);
+                alert('Failed to load cases from blockchain: ' + error.message);
+            }
+        }
+
+        function updateCaseSelectors() {
+            [document.getElementById('caseId'), document.getElementById('resolveCaseId')].forEach(select => {
+                select.innerHTML = '<option value="">Select a case</option>';
+                cases.forEach((c, i) => {
+                    const option = document.createElement('option');
+                    option.value = c.case_id !== undefined ? c.case_id : i;
+                    option.textContent = `Case #${c.case_id !== undefined ? c.case_id : i}: ${c.plaintiff} vs ${c.defendant}`;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function showCaseDetails(caseId) {
+            const c = cases.find(ca => ca.case_id === caseId) || cases[caseId];
+            if (!c) return;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <h2>Case #${c.case_id !== undefined ? c.case_id : caseId}</h2>
+                <span class="status-badge ${c.status}">${c.status.replace(/_/g, ' ')}</span>
+                <div style="margin-top: 2rem;">
+                    <div class="party" style="margin-bottom: 1.5rem;">
+                        <div class="party-label">Plaintiff:</div>
+                        <div class="party-name">${c.plaintiff}</div>
+                        ${c.plaintiff_evidence ? `<p style="margin-top: 0.75rem; font-size: 0.95rem;">${c.plaintiff_evidence}</p>` : '<p style="margin-top: 0.5rem; color: var(--sage); font-size: 0.9rem;">No evidence submitted</p>'}
+                    </div>
+                    <div class="party">
+                        <div class="party-label">Defendant:</div>
+                        <div class="party-name">${c.defendant}</div>
+                        ${c.defendant_evidence ? `<p style="margin-top: 0.75rem; font-size: 0.95rem;">${c.defendant_evidence}</p>` : '<p style="margin-top: 0.5rem; color: var(--sage); font-size: 0.9rem;">No evidence submitted</p>'}
+                    </div>
+                </div>
+                ${c.winner ? `<div class="winner" style="margin-top: 2rem;">Winner: ${c.winner.charAt(0).toUpperCase() + c.winner.slice(1)}</div><div class="reasoning">${c.reasoning}</div>` : ''}
+            `;
+            document.getElementById('caseModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('caseModal').classList.remove('active');
+        }
+
+        document.getElementById('caseModal').addEventListener('click', (e) => {
+            if (e.target.id === 'caseModal') closeModal();
+        });
+
+        init();
+    </script>
+    
+    <!-- Load GenLayer JS SDK from npm -->
+    <script type="module">
+        import { createClient, createAccount } from 'https://esm.sh/genlayer-js@latest';
+        import { studionet } from 'https://esm.sh/genlayer-js@latest/chains';
+        import { TransactionStatus } from 'https://esm.sh/genlayer-js@latest/types';
+        
+        // Make available globally
+        window.createClient = createClient;
+        window.createAccount = createAccount;
+        window.chains = { studionet };
+        window.TransactionStatus = TransactionStatus;
+        
+        console.log('✓ GenLayer SDK loaded successfully');
+    </script>
+</body>
+</html>
