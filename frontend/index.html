@@ -678,6 +678,52 @@
 
         // Initial load
         loadCases();
+
+        // In your <script type="module"> section, replace:
+import { studionet } from 'https://esm.sh/genlayer-js@latest/chains';
+
+// The SDK already uses studionet by default in your code
+// Just update the connection flow:
+
+async function connectContract() {
+    const address = document.getElementById('contractAddress').value.trim();
+    if (!address) {
+        alert('Please enter a contract address');
+        return;
+    }
+    
+    try {
+        // Create account for signing
+        const { createAccount } = window;
+        const account = createAccount();
+        
+        // Create client connected to Studio
+        const { createClient } = window;
+        const { studionet } = window.chains;
+        
+        client = createClient({
+            chain: studionet,  // Connects to studio.genlayer.com/api
+            account: account
+        });
+        
+        await client.initializeConsensusSmartContract();
+        
+        window.contractAddress = address;
+        window.clientAccount = account;
+        
+        // Update UI...
+        document.getElementById('liveNotice').style.display = 'block';
+        document.getElementById('connectedAddress').textContent = address;
+        document.getElementById('userAccount').textContent = account.address;
+        
+        alert(`✓ Connected to GenLayer Studio!\n\nContract: ${address}\nYour Address: ${account.address}\n\nSave your private key: ${account.privateKey}`);
+        
+        await loadCasesLive();
+    } catch (error) {
+        alert('Failed to connect: ' + error.message);
+        console.error(error);
+    }
+}
     </script>
 </body>
 </html>
